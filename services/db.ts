@@ -10,3 +10,11 @@ export const fetchData = async (): Promise<Todo[]> => {
 
   return JSON.parse(decodedData)
 }
+
+export const saveData = async (data: Todo[]): Promise<void> => {
+  const encoder = new TextEncoder()
+
+  const encodedData = encoder.encode(JSON.stringify(data))
+
+  await Deno.writeFile(resolve('./db/todoList.json'), encodedData)
+}

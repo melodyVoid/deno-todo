@@ -1,5 +1,6 @@
-import { Request, Response } from '../deps.ts'
-import { _getTodos } from '../services/todo.ts'
+import { Request, Response, v4 } from '../deps.ts'
+import { Todo, TodoStatus } from './todo.types.ts'
+import { _getTodos, _createTodo } from '../services/todo.ts'
 
 /**
  * @description 获取 todo-list
@@ -15,14 +16,52 @@ export const getTodos = async ({ response }: { response: Response }) => {
   }
 }
 
-
 /**
  * @description 新增 Todo
  * @route POST /todos
  * @date 2020/05/30
  */
-export const addTodo = async ({ request, response}: { request: Request, response: Response}) => {
-  response.body = 'post'
+export const addTodo = async ({
+  request,
+  response,
+}: {
+  request: Request
+  response: Response
+}) => {
+  const body = await request.body()
+  const todo: Todo = body.value
+
+  if (!request.hasBody) {
+    response.status = 400
+    response.body = {
+      code: 1,
+      message: '请求参数不合法',
+      data: null,
+    }
+    return
+  }
+
+  if (todo.content === '' || todo.content === undefined) {
+    response.status = 400
+    response.body = {
+      code: 1,
+      message: '请填写 Todo 信息',
+      data: null,
+    }
+    return
+  }
+
+  await _createTodo({
+    ...todo,
+    id: v4.generate(),
+    status: TodoStatus.TODO
+  })
+
+  response.body = {
+    code: 0,
+    message: '新增成功',
+    data: null
+  }
 }
 
 /**
@@ -30,7 +69,13 @@ export const addTodo = async ({ request, response}: { request: Request, response
  * @route GET /todos/:id
  * @date 2020/05/30
  */
-export const getTodoInfo = async ({ request, response}: { request: Request, response: Response}) => {
+export const getTodoInfo = async ({
+  request,
+  response,
+}: {
+  request: Request
+  response: Response
+}) => {
   response.body = 'getInfo'
 }
 
@@ -39,7 +84,13 @@ export const getTodoInfo = async ({ request, response}: { request: Request, resp
  * @route PUT /todos/:id
  * @date 2020/05/30
  */
-export const updateTodo = async ({ request, response}: { request: Request, response: Response}) => {
+export const updateTodo = async ({
+  request,
+  response,
+}: {
+  request: Request
+  response: Response
+}) => {
   response.body = 'put'
 }
 
@@ -48,6 +99,12 @@ export const updateTodo = async ({ request, response}: { request: Request, respo
  * @route DELETE /todos/:id
  * @date 2020/05/30
  */
-export const deleteTodo = async ({ request, response}: { request: Request, response: Response}) => {
+export const deleteTodo = async ({
+  request,
+  response,
+}: {
+  request: Request
+  response: Response
+}) => {
   response.body = 'delete'
 }

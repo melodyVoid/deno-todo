@@ -12,3 +12,8 @@ export {
  * path
  */
 export { resolve } from 'https://deno.land/std/path/mod.ts'
+
+/**
+ * uuid
+ */
+export { v4 } from 'https://deno.land/std/uuid/mod.ts'

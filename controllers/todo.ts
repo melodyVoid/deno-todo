@@ -54,13 +54,13 @@ export const addTodo = async ({
   await _createTodo({
     ...todo,
     id: v4.generate(),
-    status: TodoStatus.TODO
+    status: TodoStatus.TODO,
   })
 
   response.body = {
     code: 0,
     message: '新增成功',
-    data: null
+    data: null,
   }
 }
 
@@ -70,13 +70,38 @@ export const addTodo = async ({
  * @date 2020/05/30
  */
 export const getTodoInfo = async ({
-  request,
+  params,
   response,
 }: {
-  request: Request
+  params: { id: string }
   response: Response
 }) => {
-  response.body = 'getInfo'
+  
+  if (params === undefined || params.id === undefined) {
+    response.status = 400
+    response.body = {
+      code: 1,
+      message: '参数 id 错误'
+    }
+    return
+  }
+
+  const todoList = await _getTodos()
+  const targetTodo: Todo | undefined = todoList.find(item => item.id === params.id)
+
+  if (targetTodo === undefined) {
+    response.body = {
+      code: 1,
+      message: '没有查询到该数据'
+    }
+    return
+  }
+
+  response.body = {
+    code: 0,
+    message: '查询成功',
+    data: targetTodo,
+  }
 }
 
 /**

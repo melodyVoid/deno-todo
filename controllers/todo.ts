@@ -1,4 +1,5 @@
 import { Response } from '../deps.ts'
+import { _getTodos } from '../services/todo.ts'
 
 /**
  * @description 获取 todo-list
@@ -6,9 +7,10 @@ import { Response } from '../deps.ts'
  * @date 2020/05/30
  */
 export const getTodos = async ({ response }: { response: Response }) => {
+  const todoList = await _getTodos()
   response.body = {
     code: 0,
     message: '获取成功',
-    data: [1, 2, 3]
+    data: todoList,
   }
 }

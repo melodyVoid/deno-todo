@@ -1,12 +1,7 @@
 [
   {
-    "id": "todo-id",
-    "content": "测试todo",
-    "status": 1
-  },
-  {
     "content": "测试",
-    "id": "fec73f1a-2aa4-4a84-9cdc-81f46ddf6a95",
+    "id": "todo-id",
     "status": 0
   }
 ]

@@ -1,6 +1,12 @@
 import { Request, Response, v4 } from '../deps.ts'
 import { Todo, TodoStatus } from './todo.types.ts'
-import { _getTodos, _createTodo, _getTodo, _updateTodo } from '../services/todo.ts'
+import {
+  _getTodos,
+  _createTodo,
+  _getTodo,
+  _updateTodo,
+  _deleteTodo,
+} from '../services/todo.ts'
 
 /**
  * @description 获取 todo-list
@@ -76,12 +82,11 @@ export const getTodoInfo = async ({
   params: { id: string }
   response: Response
 }) => {
-
   if (params === undefined || params.id === undefined) {
     response.status = 400
     response.body = {
       code: 1,
-      message: '参数 id 错误'
+      message: '参数 id 错误',
     }
     return
   }
@@ -91,7 +96,7 @@ export const getTodoInfo = async ({
   if (targetTodo === undefined) {
     response.body = {
       code: 1,
-      message: '没有查询到该数据'
+      message: '没有查询到该数据',
     }
     return
   }
@@ -130,7 +135,7 @@ export const updateTodo = async ({
     response.status = 400
     response.body = {
       code: 1,
-      message: '参数错误，没有请求体'
+      message: '参数错误，没有请求体',
     }
     return
   }
@@ -140,7 +145,7 @@ export const updateTodo = async ({
 
   response.body = {
     code: 0,
-    message: '修改成功'
+    message: '修改成功',
   }
 }
 
@@ -150,11 +155,25 @@ export const updateTodo = async ({
  * @date 2020/05/30
  */
 export const deleteTodo = async ({
-  request,
+  params,
   response,
 }: {
-  request: Request
+  params: { id: string }
   response: Response
 }) => {
-  response.body = 'delete'
+  if (params.id === undefined) {
+    response.status = 400
+    response.body = {
+      code: 1,
+      message: 'ID参数错误'
+    }
+    return
+  }
+
+  await _deleteTodo(params.id)
+
+  response.body = {
+    code: 0,
+    message: '删除成功'
+  }
 }

@@ -32,9 +32,16 @@ export const _updateTodo = async (id: string, todo: Todo): Promise<void> => {
     ...todo,
   }
 
-  const todos = await _getTodos()
-  const targetIndex = todos.findIndex(item => item.id === targetTodo.id)
-  todos.splice(targetIndex, 1, newTodo)
+  const todoList = await _getTodos()
+  const targetIndex = todoList.findIndex(item => item.id === targetTodo.id)
+  todoList.splice(targetIndex, 1, newTodo)
 
-  await saveData(todos)
+  await saveData(todoList)
+}
+
+export const _deleteTodo = async (id: string): Promise<void> => {
+  const todoList = await _getTodos()
+  const todoLeft = todoList.filter(item => item.id !== id)
+
+  await saveData(todoLeft)
 }

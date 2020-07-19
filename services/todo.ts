@@ -20,7 +20,7 @@ export const _getTodo = async (id: string): Promise<Todo | undefined> => {
   return targetTodo
 }
 
-export const _updateTodo = async (id: string, todo: Todo): Promise<void> => {
+export const _updateTodo = async (id: string, todo?: Todo): Promise<void> => {
   const targetTodo = await _getTodo(id)
 
   if (targetTodo === undefined) {

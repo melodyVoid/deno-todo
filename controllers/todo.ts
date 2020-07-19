@@ -35,7 +35,7 @@ export const addTodo = async ({
   response: Response
 }) => {
   const body = await request.body()
-  const todo: Todo = body.value
+  const todo = await body.value
 
   if (!request.hasBody) {
     response.status = 400
@@ -47,7 +47,7 @@ export const addTodo = async ({
     return
   }
 
-  if (todo.content === '' || todo.content === undefined) {
+  if (todo?.content === '' || todo?.content === undefined) {
     response.status = 400
     response.body = {
       code: 1,
@@ -141,7 +141,8 @@ export const updateTodo = async ({
   }
 
   const body = await request.body()
-  await _updateTodo(params.id, body.value)
+  const todo = await body.value
+  await _updateTodo(params.id, todo)
 
   response.body = {
     code: 0,
@@ -165,7 +166,7 @@ export const deleteTodo = async ({
     response.status = 400
     response.body = {
       code: 1,
-      message: 'ID参数错误'
+      message: 'ID参数错误',
     }
     return
   }
@@ -174,6 +175,6 @@ export const deleteTodo = async ({
 
   response.body = {
     code: 0,
-    message: '删除成功'
+    message: '删除成功',
   }
 }
